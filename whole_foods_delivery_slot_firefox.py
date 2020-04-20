@@ -13,9 +13,10 @@ class WholeFoodsDeliverySlot:
         self,
         ifttt_webhook_name,
         ifttt_webhook_key,
-        amazon_smile=True,
+        speak=True,
         min_wait=2,
         max_wait=299,
+        amazon_smile=True,
         firefox_driver_path="/usr/local/bin/geckodriver",
     ):
         self.ifttt_webhook_name = ifttt_webhook_name
@@ -28,6 +29,7 @@ class WholeFoodsDeliverySlot:
             self.amazon_subdomain = "www"
         self.cart_url = f"https://{self.amazon_subdomain}.amazon.com/gp/cart/view.html?ref_=nav_cart"
         self.driver = webdriver.Firefox(executable_path=firefox_driver_path)
+        self.speak = speak
 
     def main(self):
         self._setup()
@@ -57,7 +59,7 @@ class WholeFoodsDeliverySlot:
 
     def _alert(self, message):
         print(message)
-        if platform.system() == "Darwin":
+        if platform.system() == "Darwin" and self.speak:
             # Verbal notification on mac
             os.system(f'say "{message}"')
         # value1 is message, value 2 is URL
